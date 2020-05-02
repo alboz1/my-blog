@@ -12,6 +12,9 @@ function saveUser(user, res) {
                 res.json({message: 'Account registered successfully'});
             }).catch(error => {
                 console.log(error);
+                if (error.keyValue.email) {
+                    return res.status(409).json({ message: 'Email already in use. Please choose another one.' });
+                }
             });
     });
 }
@@ -45,9 +48,14 @@ function slugify(text) {
       .replace(/-+$/, '');
 }
 
+function usernameInUse(res) {
+    return res.status(409).json({ message: 'Username already exists. Please choose another one.' });
+}
+
 module.exports = {
     saveUser,
     saveBlog,
     updateAndSavePost,
-    slugify
+    slugify,
+    usernameInUse
 };

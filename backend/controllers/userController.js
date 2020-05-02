@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const Joi = require('@hapi/joi');
 
 const { User, validateUser } = require('../models/userSchema');
-const { saveUser } = require('../utils');
+const { saveUser, usernameInUse } = require('../utils');
 const { transporter } = require('../nodeMailerConfig');
 
 //signup controller
@@ -18,7 +18,7 @@ function signUp(req, res) {
         .collation({ locale: 'en', strength: 2 })
         .then(user => {
             if (user) {
-                return res.status(409).json({ message: 'Username already exists. Please choose another one.' });
+                return usernameInUse(res);
             } else {
                 const user = new User({
                     username: req.body.username,
@@ -162,7 +162,7 @@ function editUser(req, res) {
         .collation({ locale: 'en', strength: 2 })
         .then(user => {
             if (user && user._id.toString() !== req.user._id.toString()) {
-                return res.status(409).json({ message: 'Username already exists. Please choose another one.' });
+                return usernameInUse(res);
             }
 
             User
