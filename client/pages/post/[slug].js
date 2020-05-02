@@ -46,6 +46,7 @@ const TemplateBody = styled.section`
         }
     }
     p {
+        line-height: 1.7rem;
         white-space: pre-wrap;
         overflow-wrap: break-word;
     }

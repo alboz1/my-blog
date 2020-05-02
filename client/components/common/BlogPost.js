@@ -68,7 +68,7 @@ const BlogPost = ({slug, title, date, body, stretch }) => {
     return (
         <Article stretch={stretch}>
                 <Header>
-                    <StyledLink href={`/post/${slug}`}>
+                    <StyledLink href="/post/[slug]" as={`/post/${slug}`}>
                         <h3>{title}</h3>
                     </StyledLink>
                 </Header>

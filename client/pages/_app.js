@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import Router from 'next/router';
-import Head from 'next/head';
 import NProgress from 'nprogress';
 import { MainProvider } from '../contexts/MainContext';
 import { ToggleThemeProvider } from '../contexts/ThemeContext';
@@ -30,9 +29,6 @@ const App = ({ Component, pageProps }) => {
         <ToggleThemeProvider>
             <MainProvider>
                 <AlertProvider>
-                    <Head>
-                        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"></link>
-                    </Head>
                     <GlobalStyles />
 			        <Alert />
                     <Component {...pageProps} />
