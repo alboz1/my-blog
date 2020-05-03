@@ -11,7 +11,7 @@ function redirect(target, context) {
             location: target
         });
         context.res.end();
-        return {};
+        return;
     }
 }
 

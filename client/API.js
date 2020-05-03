@@ -24,22 +24,22 @@ export async function isAuthenticated(context) {
         } else {
             return null;
         }
-    }
-
-    //check if user is logged in in server side
-    const response = await fetch(`${process.env.API_URL}/api/user/`, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            cookie: context.req.headers.cookie
-        }
-    });
-
-    if (response.ok) {
-        const user = await response.json();
-        return user;
     } else {
-        return {};
+        //check if user is logged in in server side
+        const response = await fetch(`${process.env.API_URL}/api/user/`, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                cookie: context.req.headers.cookie
+            }
+        });
+    
+        if (response.ok) {
+            const user = await response.json();
+            return user;
+        } else {
+            return {};
+        }
     }
 }
 

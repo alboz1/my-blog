@@ -61,7 +61,7 @@ const Login = () => {
         setLoading(true);
 
         loginUser({
-            email,	
+            email,
             password
         })
         .then(response => {
