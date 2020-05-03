@@ -73,7 +73,7 @@ const TagsSection = styled.section`
     margin: 3rem 0;
 `;
 
-const Post = ({ post, user, error }) => {
+const Post = ({ post, user }) => {
     const { dispatchUserAction } = useContext(MainContext);
 
     useEffect(() => {
@@ -86,48 +86,44 @@ const Post = ({ post, user, error }) => {
             id: user.id
         });
     }, [])
+    
+    if (!post) return <NotFound />
 
     return (
         <Layout title={post.title}>
-            {
-                error ?
-                <NotFound /> :
-                <Template>
-                    <>
-                        <TemplateHeader>
-                            <h1>{ post.title }</h1>
-                            <BlogInfo>
-                                <StyledLink bold="true" href="/user/[username]" as={`/user/${post.author}`} prefetch={false}>
-                                    { post.author }
-                                </StyledLink>
-                                <Small>{ new Date(post.updatedAt).toDateString() }</Small>
-                            </BlogInfo>
-                            { post.img ? <img src={ post.img } alt="post-header" /> : null }
-                        </TemplateHeader>
+            <Template>
+                <TemplateHeader>
+                    <h1>{ post.title }</h1>
+                    <BlogInfo>
+                        <StyledLink bold="true" href="/user/[username]" as={`/user/${post.author}`} prefetch={false}>
+                            { post.author }
+                        </StyledLink>
+                        <Small>{ new Date(post.updatedAt).toDateString() }</Small>
+                    </BlogInfo>
+                    { post.img ? <img src={ post.img } alt="post-header" /> : null }
+                </TemplateHeader>
 
-                        <TemplateBody>
-                            <RenderHTML blocks={JSON.parse(post.body).blocks}/>
-                        </TemplateBody>
-                        <TagsSection>
-                            {
-                                post.tags.map((tag, index) => {
-                                    return <TagLink
-                                                className="tag"
-                                                href="/tag/[name]"
-                                                as={`/tag/${tag}`}
-                                                key={index}>
-                                                {tag}
-                                            </TagLink>
-                                })
-                            }
-                        </TagsSection>
-                        <CommentSection
-                            postId={ post._id }
-                            postOwnerId={ post.userId }
-                        />
-                    </>
-                </Template>
-            }
+                <TemplateBody>
+                    <RenderHTML blocks={JSON.parse(post.body).blocks}/>
+                </TemplateBody>
+                <TagsSection>
+                    {
+                        post.tags.map((tag, index) => {
+                            return <TagLink
+                                        className="tag"
+                                        href="/tag/[name]"
+                                        as={`/tag/${tag}`}
+                                        key={index}>
+                                        {tag}
+                                    </TagLink>
+                        })
+                    }
+                </TagsSection>
+                <CommentSection
+                    postId={ post._id }
+                    postOwnerId={ post.userId }
+                />
+            </Template>
         </Layout>  
     );
 }
@@ -141,7 +137,7 @@ export async function getServerSideProps(context) {
         }
     } catch(error) {
         return {
-            props: {user, error: error.response.message}
+            props: {user, post: null}
         }
     }
     

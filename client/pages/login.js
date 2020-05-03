@@ -46,19 +46,26 @@ const Alert = styled.div`
 const Login = () => {
     const { value: email, bind: bindEmail } = useInput('');
     const { value: password, bind: bindPassword } = useInput('');
-    const { dispatchUserAction } = useContext(MainContext);
+    const { user, dispatchUserAction } = useContext(MainContext);
     const [ error, setError ] = useState('');
-    const [ loading, setLoading ] = useState(false);
+    const [ disableBtn, setDisableBtn ] = useState(false);
     const router = useRouter();
     let ignore = false;
 
     useEffect(() => {
+        // isAuthenticated()
+        //     .then(user => {
+        //         if (user) {
+        //             redirect(`/user/${user.username}`);
+        //         }
+        //     })
+
         return () => ignore = true;
     }, [ignore])
 
     const handleSubmit = e => {
         e.preventDefault();
-        setLoading(true);
+        setDisableBtn(true);
 
         loginUser({
             email,
@@ -73,12 +80,12 @@ const Login = () => {
                     avatar: response.avatar,
                     id: response.id
                 });
-                setLoading(false);
+                setDisableBtn(false);
             }
         })
         .catch(error => {
             if (!ignore) {
-                setLoading(false);
+                setDisableBtn(false);
                 setError(error.message || error.response.message);
             }
         });
@@ -102,7 +109,7 @@ const Login = () => {
                     <Input type="text" name="email" id="email" placeholder="Email" {...bindEmail} required />
                     <Label margin="0.9rem 0" htmlFor="password">Password</Label>
                     <Input type="password" name="password" id="password" placeholder="Password" {...bindPassword} required />
-                    <PrimaryButton type="submit" disabled={loading}>
+                    <PrimaryButton type="submit" disabled={disableBtn}>
                         Login
                     </PrimaryButton>
                 </Form>
@@ -118,11 +125,11 @@ export async function getServerSideProps(context) {
     const user = await isAuthenticated(context);
 
     if (user.username) {
-        redirect('/', context);
-    }
-
-    return {
-        props: {}
+        redirect(`/user/${user.username}`, context);
+    } else {
+        return {
+            props: {}
+        }
     }
 }
 

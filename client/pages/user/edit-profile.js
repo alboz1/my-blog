@@ -7,10 +7,9 @@ import { MainContext } from '../../contexts/MainContext';
 import { AlertContext } from '../../contexts/AlertContext';
 import useInput from '../../hooks/useInput';
 import { editUser } from '../../API';
-import { isAuthenticated } from '../../API';
-import { privateRoute } from '../../utils/privateRoute';
 import { useRouter } from 'next/router';
 import Layout from '../../components/common/Layout';
+import PrivateRoute from '../../components/PrivateRoute';
 
 const EditProfileGrid = styled.div`
     max-width: 800px;
@@ -23,24 +22,16 @@ const Header = styled.header`
     align-items: center;
 `;
 
-const EditProfile = ({ user }) => {
-    const { dispatchUserAction } = useContext(MainContext);
+const EditProfile = () => {
+    const { user } = useContext(MainContext);
     const { value: avatar, setValue: setAvatar } = useInput('');
     const { value: username, setValue: setUsername } = useInput('');
     const { sendSuccess, sendError } = useContext(AlertContext);
     const [ disableBtn, setDisableBtn ] = useState(false);
     const router = useRouter();
-
     let ignore = false;
 
     useEffect(() => {
-        dispatchUserAction({
-            type: 'GET_USER',
-            username: user.username,
-            avatar: user.avatar,
-            id: user.id
-        });
-
         setAvatar(user.avatar || '');
         setUsername(user.username);
 
@@ -117,13 +108,4 @@ const EditProfile = ({ user }) => {
     );
 }
 
-export async function getServerSideProps(context) {
-    const user = await isAuthenticated(context);
-    privateRoute(user, context);
-
-    return {
-        props: {user}
-    }
-}
-
-export default EditProfile;
+export default PrivateRoute(EditProfile);

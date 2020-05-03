@@ -64,12 +64,11 @@ const ImageWrapper = styled.div`
 `;
 
 const Profile = ({ loggedInUser, userInfo }) => {
+    if (!userInfo) return <NotFound />
     const { user, dispatchUserAction } = useContext(MainContext);
     const { posts, loadingEl, loading, hasMore } = useObserver(getProfilePosts, userInfo.username);
 
     useEffect(() => {
-        if (!loggedInUser.username) return;
-
         dispatchUserAction({
             type: 'GET_USER',
             username: loggedInUser.username,
@@ -77,73 +76,70 @@ const Profile = ({ loggedInUser, userInfo }) => {
             id: loggedInUser.id
         });
     },[])
+
     return (
         <Layout title={userInfo.username}>
-            {
-                !userInfo.username ?
-                <NotFound /> :
-                <div>
-                    <Header>
-                        <>
-                            <div>
-                                <Avatar>
-                                    {
-                                        userInfo.avatar ?
-                                        <img src={userInfo.avatar} alt={userInfo.username} /> :
-                                        <DefaultAvatar />
-                                    }
-                                </Avatar>
-                            </div>
-                            <div>
-                                <h1> { userInfo.username }</h1>
+            <div>
+                <Header>
+                    <>
+                        <div>
+                            <Avatar>
                                 {
-                                    user.username === userInfo.username &&
-                                    <StyledLink href="/user/edit-profile">
-                                        Edit Profile
-                                    </StyledLink>
+                                    userInfo.avatar ?
+                                    <img src={userInfo.avatar} alt={userInfo.username} /> :
+                                    <DefaultAvatar />
                                 }
-                            </div>
-                        </>
-                    </Header>
-                    <PostsGrid>
-                        {
-                            loading && !hasMore ? (
-                                <>
-                                    <Placeholder placeholderFor='blogPost'/>
-                                    <Placeholder placeholderFor='blogPost'/>
-                                </>
-                            ) :
-                            posts && posts.length ?
-                            posts.map(post => (
-                                <BlogPost
-                                    key={post._id}
-                                    slug={post.slug}
-                                    title={post.title}
-                                    date={ new Date(post.updatedAt).toDateString() }
-                                />
-                            )) :
-                            <ImageWrapper>
-                                <img src="/undraw_no_data_qbuo.svg" alt="no posts" />
-                                <h2>
-                                    {
-                                        userInfo.username === user.username ?
-                                        'You have no posts' :
-                                        userInfo.username + ' has no posts'
-                                    }
-                                </h2>
-                            </ImageWrapper>
-                        }
-
-                        {
-                            hasMore ?
-                            <div ref={loadingEl}>
+                            </Avatar>
+                        </div>
+                        <div>
+                            <h1> { userInfo.username }</h1>
+                            {
+                                user.username === userInfo.username &&
+                                <StyledLink href="/user/edit-profile">
+                                    Edit Profile
+                                </StyledLink>
+                            }
+                        </div>
+                    </>
+                </Header>
+                <PostsGrid>
+                    {
+                        loading && !hasMore ? (
+                            <>
                                 <Placeholder placeholderFor='blogPost'/>
-                            </div> :
-                            null
-                        }
-                    </PostsGrid>
-                </div>
-            }
+                                <Placeholder placeholderFor='blogPost'/>
+                            </>
+                        ) :
+                        posts && posts.length ?
+                        posts.map(post => (
+                            <BlogPost
+                                key={post._id}
+                                slug={post.slug}
+                                title={post.title}
+                                date={ new Date(post.updatedAt).toDateString() }
+                            />
+                        )) :
+                        <ImageWrapper>
+                            <img src="/undraw_no_data_qbuo.svg" alt="no posts" />
+                            <h2>
+                                {
+                                    userInfo.username === user.username ?
+                                    'You have no posts' :
+                                    userInfo.username + ' has no posts'
+                                }
+                            </h2>
+                        </ImageWrapper>
+                    }
+
+                    {
+                        hasMore ?
+                        <div ref={loadingEl}>
+                            <Placeholder placeholderFor='blogPost'/>
+                        </div> :
+                        null
+                    }
+                </PostsGrid>
+            </div>
         </Layout>
     );
 }
@@ -157,7 +153,7 @@ export async function getServerSideProps(context) {
         }
     } catch(error) {
         return {
-            props: {loggedInUser, userInfo: {}}
+            props: {loggedInUser, userInfo: null}
         }
     }
 }

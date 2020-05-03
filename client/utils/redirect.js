@@ -1,9 +1,9 @@
 import Router from 'next/router';
 
 function redirect(target, context) {
-    if (!context.req) {
+    if (!context) {
         Router.replace(target);
-        return {};
+        return;
     }
 
     if (context.req) {

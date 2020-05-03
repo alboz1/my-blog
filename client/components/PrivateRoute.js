@@ -1,49 +1,40 @@
-import React, { useContext, useEffect, useState, useLayoutEffect } from 'react';
-import { useRouter } from 'next/router';
+import React, { useContext, useEffect, useState } from 'react';
 import { MainContext } from '../contexts/MainContext';
+import redirect from '../utils/redirect';
+import { isAuthenticated } from '../API';
 
 //private route for client side rendering
 const PrivateRoute = (Component) => {
     return ({ ...props }) => {
         const { user, dispatchUserAction } = useContext(MainContext);
         const [ loading, setLoading ] = useState(true);
-        const router = useRouter();
     
         useEffect(() => {
             if (!user.isLoggedIn) {
-                fetch(`${process.env.API_URL}/api/user/`, {
-                    method: 'GET',
-                    mode: 'cors',
-                    credentials: 'include'
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error(response.statusText);
-                    }
-                })
-                .then(user => {
-                    dispatchUserAction({
-                        type: 'GET_USER',
-                        username: user.username,
-                        avatar: user.avatar,
-                        id: user.id
+                isAuthenticated()
+                    .then(loggedInUser => {
+                        if (loggedInUser) {
+                            dispatchUserAction({
+                                type: 'GET_USER',
+                                username: loggedInUser.username,
+                                avatar: loggedInUser.avatar,
+                                id: loggedInUser.id
+                            });
+                        }
+                        setLoading(false);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        setLoading(false);
                     });
-                    setLoading(false);
-                })
-                .catch(error => {
-                    console.log(error);
-                    setLoading(false);
-                });
             }
         }, [])
 
-        if (!loading && !user.isLoggedIn) router.replace('/login');
+        if (!loading && !user.isLoggedIn) redirect('/login');
 
         return (
             <>
-                { user.isLoggedIn && <Component { ...props } />}
+                { user.isLoggedIn && <Component { ...props } /> }
             </>
         );
     }

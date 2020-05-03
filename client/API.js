@@ -30,7 +30,7 @@ export async function isAuthenticated(context) {
             method: 'GET',
             mode: 'cors',
             headers: {
-                cookie: context.req.headers.cookie
+                Cookie: context.req.headers.cookie
             }
         });
     

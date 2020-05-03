@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import useObserver from '../hooks/useObserver';
 import { DialogProvider } from '../contexts/DialogContext';
 import { MainContext } from '../contexts/MainContext';
-import { getDashboardPosts, isAuthenticated } from '../API';
-import { privateRoute } from '../utils/privateRoute';
+import { getDashboardPosts } from '../API';
 import Table from '../components/Table';
 import { PrimaryButton } from '../components/ui/Button';
 import Loader from '../components/ui/Loader';
 import { device } from '../globals';
 import { StyledLink } from '../components/ui/Link';
 import Layout from '../components/common/Layout';
+import PrivateRoute from '../components/PrivateRoute';
 
 const DashboardHeader = styled.header`
     display: flex;
@@ -39,19 +39,13 @@ const Image = styled.img`
     width: 100%;
 `;
 
-const Dashboard = ({ user }) => {
+const Dashboard = () => {
     const { posts, loading, loadingEl, hasMore } = useObserver(getDashboardPosts);
-    const { dashboardPosts, dispatchPostAction, dispatchUserAction } = useContext(MainContext);
+    const { dashboardPosts, dispatchPostAction } = useContext(MainContext);
 
     useEffect(() => {
         dispatchPostAction({ type: 'GET_BLOGS', payload: posts });
-        dispatchUserAction({
-            type: 'GET_USER',
-            username: user.username,
-            avatar: user.avatar,
-            id: user.id
-        });
-    }, [posts, user])
+    }, [posts])
 
     return (
         <Layout title="Dashboard">
@@ -85,13 +79,4 @@ const Dashboard = ({ user }) => {
     );
 }
 
-export async function getServerSideProps(context) {
-    const user = await isAuthenticated(context);
-    privateRoute(user, context);
-
-    return {
-        props: {user}
-    }
-}
-
-export default Dashboard;
+export default PrivateRoute(Dashboard);

@@ -137,11 +137,11 @@ export async function getServerSideProps(context) {
     const user = await isAuthenticated(context);
 
     if (user.username) {
-        redirect('/', context);
-    }
-
-    return {
-        props: {}
+        redirect(`/user/${user.username}`, context);
+    } else {
+        return {
+            props: {}
+        }
     }
 }
 
