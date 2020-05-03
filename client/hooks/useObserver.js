@@ -2,12 +2,13 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import useGetPosts from './useGetPosts';
 
 //hook that creates an intersection observer to update the page for lazy loading posts
-const useObserver = (getPosts, username) => {
+const useObserver = (getPosts, username, dashboard) => {
     const [ page, setPage ] = useState(0);
-    const { posts, loading, hasMore } = useGetPosts(getPosts, page, username);
+    const { posts, loading, hasMore } = useGetPosts(getPosts, page, username, dashboard);
     const observer = useRef();
 
     useEffect(() => {
+        posts.splice(0, posts.length);
         setPage(0);
     }, [username])
 

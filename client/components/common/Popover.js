@@ -66,7 +66,7 @@ const Popover = ({ reference, animate, top, bottom, right, left }) => {
     
     return (
         <Container ref={reference} animate={animate} top={top} bottom={bottom} right={right} left={left}>
-            <PopoverLink block href="/user/[username]" as={`/user/${user.username.replace(' ', '')}`} prefetch={false}>My Profile</PopoverLink>
+            <PopoverLink block href="/user/[username]" as={`/user/${user.username}`} prefetch={false}>My Profile</PopoverLink>
             <LogoutBtn wide small onClick={handleLogout}>Log out</LogoutBtn>
             <ThemeSwitch mobile/>
         </Container>

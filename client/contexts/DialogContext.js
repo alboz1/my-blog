@@ -1,4 +1,5 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
+import { deleteBlogPost } from '../API';
 
 const initalValue = {
     dialog: {
@@ -31,7 +32,7 @@ export const DialogProvider = ({ children }) => {
         });
     }
 
-    const confirm = (id) => {
+    const confirm = () => {
         setDialog({
             open: false,
             confirm: true

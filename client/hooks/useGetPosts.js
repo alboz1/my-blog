@@ -1,8 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
 import { AlertContext } from '../contexts/AlertContext';
+import { MainContext } from '../contexts/MainContext';
 
 //custom hook to lazy load posts for different pages
-const useGetPosts = (getPosts, page, username) => {
+const useGetPosts = (getPosts, page, username, dashboard) => {
+    const { dispatchPostAction } = useContext(MainContext);
     const [ posts, setPosts ] = useState([]);
     const [ loading, setLoading ] = useState(true);
     const [ hasMore, setHasMore ] = useState(false);
@@ -14,9 +16,13 @@ const useGetPosts = (getPosts, page, username) => {
         getPosts(page, username)
             .then(blogPosts => {
                 if (!ignore) {
-                    setPosts(prevPosts => {
-                        return [...prevPosts, ...blogPosts]
-                    });
+                    if (dashboard) {
+                        dispatchPostAction({ type: 'GET_BLOGS', payload: blogPosts });
+                    } else {
+                        setPosts(() => {
+                            return [...posts, ...blogPosts]
+                        });
+                    }
                     setHasMore(blogPosts.length > 0);
                     setLoading(false);
                 }

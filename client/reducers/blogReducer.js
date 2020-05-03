@@ -1,7 +1,7 @@
 export default (posts, action) => {
     switch (action.type) {
       case 'GET_BLOGS':
-        return action.payload;
+        return [...posts, ...action.payload];
       case 'DELETE_POST':
         return posts.filter(post => post._id !== action.id);
       case 'PUBLISH_POST':

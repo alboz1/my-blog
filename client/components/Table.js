@@ -106,8 +106,8 @@ const TableHeader = styled.thead`
 
 const Table = () => {
     const { dashboardPosts, dispatchPostAction } = useContext(MainContext);
-    const { dialog, openDialog } = useContext(DialogContext);
-    const { sendSuccess, sendError, closeAlert } = useContext(AlertContext);
+    const { dialog, openDialog, closeDialog } = useContext(DialogContext);
+    const { sendSuccess, sendError } = useContext(AlertContext);
     const [ deleteButton, setDeleteButton ] = useState('');
     const [ reverseSort, setReverseSort ] = useState({
         byPublished: false,
@@ -116,7 +116,6 @@ const Table = () => {
     let ignore = false;
 
     useEffect(() => {
-        closeAlert();
         if (dialog.confirm) {
             disableButton(deleteButton);
             deleteBlogPost(deleteButton.target.id)
@@ -126,12 +125,14 @@ const Table = () => {
                         sendSuccess(data.message);
                         deleteButton.target.disabled = false;
                         deleteButton.target.previousSibling.disabled = false;
+                        closeDialog();
                     }
                 }).catch(error => {
                     if (!ignore) {
                         sendError(error.message || error.response.message);
                         deleteButton.target.disabled = false;
                         deleteButton.target.previousSibling.disabled = false;
+                        closeDialog();
                     }
                 });
         }

@@ -74,12 +74,6 @@ const Login = () => {
         .then(response => {
             if (!ignore) {
                 router.back();
-                dispatchUserAction({
-                    type: 'GET_USER',
-                    username: response.username,
-                    avatar: response.avatar,
-                    id: response.id
-                });
                 setDisableBtn(false);
             }
         })

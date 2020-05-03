@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import Layout from '../../components/common/Layout';
 import BlogPost from '../../components/common/BlogPost';
@@ -63,19 +63,21 @@ const ImageWrapper = styled.div`
 	}
 `;
 
-const Profile = ({ loggedInUser, userInfo }) => {
+const Profile = ({ user, userInfo }) => {
     if (!userInfo) return <NotFound />
-    const { user, dispatchUserAction } = useContext(MainContext);
+    const { dispatchUserAction } = useContext(MainContext);
     const { posts, loadingEl, loading, hasMore } = useObserver(getProfilePosts, userInfo.username);
 
     useEffect(() => {
-        dispatchUserAction({
-            type: 'GET_USER',
-            username: loggedInUser.username,
-            avatar: loggedInUser.avatar,
-            id: loggedInUser.id
-        });
-    },[])
+        if (user.username) {
+            dispatchUserAction({
+                type: 'GET_USER',
+                username: user.username,
+                avatar: user.avatar,
+                id: user.id
+            });
+        }
+    }, [])
 
     return (
         <Layout title={userInfo.username}>
@@ -145,15 +147,15 @@ const Profile = ({ loggedInUser, userInfo }) => {
 }
 
 export async function getServerSideProps(context) {
-    const loggedInUser = await isAuthenticated(context);
+    const user = await isAuthenticated(context);
     try {
         const userInfo = await getUserInfo(context.params.username);
         return {
-            props: {loggedInUser, userInfo}
+            props: {user, userInfo}
         }
     } catch(error) {
         return {
-            props: {loggedInUser, userInfo: null}
+            props: {user, userInfo: null}
         }
     }
 }

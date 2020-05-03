@@ -40,16 +40,16 @@ const Image = styled.img`
 `;
 
 const Dashboard = () => {
-    const { posts, loading, loadingEl, hasMore } = useObserver(getDashboardPosts);
-    const { dashboardPosts, dispatchPostAction } = useContext(MainContext);
+    const { loading, loadingEl, hasMore } = useObserver(getDashboardPosts, null, true);
+    const { dashboardPosts } = useContext(MainContext);
 
     useEffect(() => {
-        dispatchPostAction({ type: 'GET_BLOGS', payload: posts });
-    }, [posts])
+        dashboardPosts.splice(0, dashboardPosts.length);
+    }, [])
 
     return (
         <Layout title="Dashboard">
-            <DialogProvider>	
+            <DialogProvider>
                 <>
                     <DashboardHeader>
                         <h2>Dashboard</h2>

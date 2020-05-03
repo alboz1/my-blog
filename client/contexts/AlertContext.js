@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 
 const initialValue = {
     alert: {
@@ -19,6 +19,12 @@ export const AlertProvider = ({ children }) => {
         text: '',
         active: false
     });
+
+    useEffect(() => {
+        setTimeout(() => {
+            closeAlert();
+        }, 3000);
+    }, [alert.active])
 
     const sendSuccess = (message) => {
         setAlert({
