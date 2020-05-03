@@ -1,7 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Form from '../components/common/Form';
-import { MainContext } from '../contexts/MainContext';
 import useInput from '../hooks/useInput';
 import { loginUser, isAuthenticated } from '../API';
 import { Input, Label } from '../components/ui/Input';
@@ -46,20 +45,12 @@ const Alert = styled.div`
 const Login = () => {
     const { value: email, bind: bindEmail } = useInput('');
     const { value: password, bind: bindPassword } = useInput('');
-    const { user, dispatchUserAction } = useContext(MainContext);
     const [ error, setError ] = useState('');
     const [ disableBtn, setDisableBtn ] = useState(false);
     const router = useRouter();
     let ignore = false;
 
     useEffect(() => {
-        // isAuthenticated()
-        //     .then(user => {
-        //         if (user) {
-        //             redirect(`/user/${user.username}`);
-        //         }
-        //     })
-
         return () => ignore = true;
     }, [ignore])
 
@@ -71,7 +62,7 @@ const Login = () => {
             email,
             password
         })
-        .then(response => {
+        .then(() => {
             if (!ignore) {
                 router.back();
                 setDisableBtn(false);
