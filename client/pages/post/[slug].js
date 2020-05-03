@@ -113,7 +113,8 @@ const Post = ({ post, user, error }) => {
                                 post.tags.map((tag, index) => {
                                     return <TagLink
                                                 className="tag"
-                                                href={`/tag/${tag}`}
+                                                href="/tag/[name]"
+                                                as={`/tag/${tag}`}
                                                 key={index}>
                                                 {tag}
                                             </TagLink>
