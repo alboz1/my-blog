@@ -97,7 +97,9 @@ const Post = ({ post, user, error }) => {
                         <TemplateHeader>
                             <h1>{ post.title }</h1>
                             <BlogInfo>
-                                <StyledLink bold="true" href={`/user/${post.author}`}>{ post.author }</StyledLink>
+                                <StyledLink bold="true" href="/user/[username]" as={`/user/${post.author}`} prefetch={false}>
+                                    { post.author }
+                                </StyledLink>
                                 <Small>{ new Date(post.updatedAt).toDateString() }</Small>
                             </BlogInfo>
                             { post.img ? <img src={ post.img } alt="post-header" /> : null }

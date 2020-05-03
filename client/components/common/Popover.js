@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { MainContext } from '../../contexts/MainContext';
 import { logoutUser } from '../../API';
-import { StyledLink } from '../ui/Link';
+import { PopoverLink } from '../ui/Link';
 import { defaultBoxShadow } from '../../globals/theme';
 import { device } from '../../globals';
 import { AlertContext } from '../../contexts/AlertContext';
@@ -32,17 +32,6 @@ const Container = styled.div`
         padding: 0.5rem 0;
         left: 10px;
         right: 10px;
-    }
-`;
-
-const Links = styled(StyledLink)`
-    padding: 0.7rem 1.7rem;
-    &:first-child {
-        margin-top: 0;
-    }
-    @media ${device.mobile} {
-        padding: 0.7rem 0;
-        font-size: 1.08em;
     }
 `;
 
@@ -77,7 +66,7 @@ const Popover = ({ reference, animate, top, bottom, right, left }) => {
     
     return (
         <Container ref={reference} animate={animate} top={top} bottom={bottom} right={right} left={left}>
-            <Links block href={`/user/${user.username.replace(' ', '')}`}>My Profile</Links>
+            <PopoverLink block href="/user/[username]" as={`/user/${user.username.replace(' ', '')}`} prefetch={false}>My Profile</PopoverLink>
             <LogoutBtn wide small onClick={handleLogout}>Log out</LogoutBtn>
             <ThemeSwitch mobile/>
         </Container>
