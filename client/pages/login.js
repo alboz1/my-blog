@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import Form from '../components/common/Form';
+import { MainContext } from '../contexts/MainContext';
 import useInput from '../hooks/useInput';
 import { loginUser, isAuthenticated } from '../API';
 import { Input, Label } from '../components/ui/Input';
@@ -45,6 +46,7 @@ const Alert = styled.div`
 const Login = () => {
     const { value: email, bind: bindEmail } = useInput('');
     const { value: password, bind: bindPassword } = useInput('');
+    const { dispatchUserAction } = useContext(MainContext);
     const [ error, setError ] = useState('');
     const [ disableBtn, setDisableBtn ] = useState(false);
     const router = useRouter();
@@ -62,9 +64,15 @@ const Login = () => {
             email,
             password
         })
-        .then(() => {
+        .then(response => {
             if (!ignore) {
                 router.back();
+                dispatchUserAction({
+                    type: 'GET_USER',
+                    username: response.username,
+                    avatar: response.avatar,
+                    id: response.id
+                });
                 setDisableBtn(false);
             }
         })
