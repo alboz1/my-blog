@@ -96,7 +96,7 @@ const Profile = ({ user, userInfo }) => {
                         <div>
                             <h1> { userInfo.username }</h1>
                             {
-                                user.username === userInfo.username &&
+                                user.id === userInfo._id &&
                                 <StyledLink href="/user/edit-profile">
                                     Edit Profile
                                 </StyledLink>

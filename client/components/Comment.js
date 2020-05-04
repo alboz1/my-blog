@@ -132,11 +132,9 @@ const Comment = ({ id, author, date, body, postOwnerId }) => {
             .then(response => {
                 dispatchComments({ type: 'DELETE_COMMENT', id: id });
                 sendSuccess(response.message);
-                setLoading(false);
             })
             .catch(error => {
                 sendError(error.response.message);
-                setLoading(false);
             });
     }
 

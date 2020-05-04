@@ -8,6 +8,7 @@ const useObserver = (getPosts, username, dashboard) => {
     const observer = useRef();
 
     useEffect(() => {
+        //when username changes (user goes to a different profile page) delete all other posts that were in posts array
         posts.splice(0, posts.length);
         setPage(0);
     }, [username])
