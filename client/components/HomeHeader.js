@@ -117,7 +117,7 @@ const HomeHeader = () => {
                 <Tags ref={nav} onScroll={handleHidePaddle}>
                     {
                         tags && tags.map((tag, index) => (
-                            <TagLink href={`/tag/${tag}`} key={ index }>
+                            <TagLink href="/tag/[name]" as={`/tag/${tag}`} key={ index }>
                                 {tag}
                             </TagLink>
                         ))
