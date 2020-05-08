@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import { StyledLink, FooterLink } from '../ui/Link';
 import { Small } from '../ui/Small';
 import { device } from '../../globals';
+import { fadeIn } from '../ui/animations';
 
 export const Article = styled.article`
+    animation: ${fadeIn} 0.5s cubic-bezier(.22,.23,.25,1.05);
     border: 1px solid ${({ theme }) => theme.lightGrey};
     box-sizing: border-box;
     border-radius: 5px;

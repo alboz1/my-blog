@@ -50,6 +50,8 @@ const Home = ({ user }) => {
                                 <Placeholder placeholderFor='blogPost'/>
                                 <Placeholder placeholderFor='blogPost'/>
                                 <Placeholder placeholderFor='blogPost'/>
+                                <Placeholder placeholderFor='blogPost'/>
+                                <Placeholder placeholderFor='blogPost'/>
                             </>
                         ) :
                         posts.map((post, index) => {

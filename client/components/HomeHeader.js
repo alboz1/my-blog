@@ -112,6 +112,8 @@ const HomeHeader = () => {
                     <Placeholder placeholderFor='tag' />
                     <Placeholder placeholderFor='tag' />
                     <Placeholder placeholderFor='tag' />
+                    <Placeholder placeholderFor='tag' />
+                    <Placeholder placeholderFor='tag' />
                 </LoadingContainer> :
 
                 <Tags ref={nav} onScroll={handleHidePaddle}>

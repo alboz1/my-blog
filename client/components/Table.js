@@ -9,8 +9,10 @@ import { PrimaryButton, DeleteButton, DefaultButton } from './ui/Button';
 import { StyledLink } from './ui/Link';
 import { DialogContext } from '../contexts/DialogContext';
 import { device } from '../globals';
+import { fadeIn } from './ui/animations';
 
 const StyledTable = styled.table`
+    animation: ${fadeIn} 0.5s cubic-bezier(.22,.23,.25,1.05);
     background: ${({ theme }) => theme.sidebarBg};
     border: 1px solid ${({ theme }) => theme.lightGrey};
     border-radius: 5px;
@@ -241,7 +243,7 @@ const Table = () => {
 
                 <tbody>
                     {
-                        dashboardPosts && dashboardPosts.map((post, index) => {
+                        dashboardPosts.map((post, index) => {
                             const updatedAt = new Date(post.updatedAt).toDateString();
                             return (
                                 <tr key={ index }>
